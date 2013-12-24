@@ -1,4 +1,5 @@
-setwd("~/crickhome/scripts/reproducibility/peer4rnaseq/")
+#set path to source directory, change this if you want to run the code
+setwd("reproducibility/peer4rnaseq/")
 
 #Plot expression values distribution before and after correction
 ori<-t(read.table("tsiexp.txt",sep=","))
