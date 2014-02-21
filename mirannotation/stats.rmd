@@ -1,0 +1,39 @@
+```{r}
+data<-read.table("stats",skip=1)
+data$V4<-data$V4/abs(data$V4)
+data$V4[data$V4==1]<-"Add"
+data$V4[data$V4==-1]<-"Na"
+data$V5<-data$V5/abs(data$V5)
+data$V5[data$V5==1]<-"Mut"
+data$V5[data$V5==-1]<-"Na"
+data$changes<-paste(data$V4,data$V5)
+```
+
+
+Proportion of mapped and no-mapped sequences
+```{r}
+library(ggplot2)
+ggplot(data,aes(V7,fill=V3))+
+  geom_bar()+
+  theme_bw()+ labs(x="")+
+  scale_fill_brewer("mapped",palette="Set1")
+```
+
+How size affects the alignments
+```{r}
+ggplot(data,aes(V7,V6,fill=V3))+
+  geom_boxplot()+
+  theme_bw()+ labs(x="")+
+  scale_fill_brewer("mapped",palette="Set1")
+```
+
+How changes affect the alignment
+```{r}
+ggplot(data,aes(V7,fill=changes))+
+  geom_bar()+
+  theme_bw()+ labs(x="")+
+  facet_wrap(~V3)+
+  scale_fill_brewer("changes",palette="Set1")
+```
+
+
