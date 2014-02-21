@@ -1,8 +1,8 @@
 setwd("~/crickhome/scripts/reproducibility/peer4rnaseq/")
 
 #Plot expression values distribution before and after correction
-ori<-t(read.table("tsiexp.txt",sep=","))
-def<-t(read.table("tsiexp.def.txt",sep=","))
+ori<-t(read.table(bzfile("tsiexp.txt.bz2"),sep=","))
+def<-t(read.table(bzfile("tsiexp.def.txt.bz2"),sep=","))
 
 n<-19176
 
