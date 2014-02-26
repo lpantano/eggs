@@ -26,10 +26,10 @@ for line in mir:
 		if (line.find("miRNA")>=0) and (not check.has_key(cols[1])):
 			check[cols[1]]=1
 			print "%s\t%s\tyes\t%s\t%s\t%s\tmiraligner" %(cols[1],"-".join(slot[0:3]),add,mut,lendata[cols[1]])
-		elif (line.find("precursor")>=0) and (not check.has_key(cols[2])):
-			check[cols[2]]=1
+		elif (line.find("precursor")>=0) and (not check.has_key(cols[1])):
+			check[cols[1]]=1
 			slot=cols[1].split("-")
-			print "%s\t%s\tyes\t%s\t%s\t%s\tmiraligner" %(cols[2],"-".join(slot[0:3]),add,mut,lendata[cols[2]])
+			print "%s\t%s\tyes\t%s\t%s\t%s\tmiraligner" %(cols[1],"-".join(slot[0:3]),add,mut,lendata[cols[1]])
 mir.close()
 
 for k in data.keys():

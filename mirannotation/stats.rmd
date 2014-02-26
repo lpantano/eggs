@@ -11,7 +11,7 @@ data$changes<-paste(data$V4,data$V5)
 
 
 Proportion of mapped and no-mapped sequences
-```{r}
+```{r dev='svg'}
 library(ggplot2)
 ggplot(data,aes(V7,fill=V3))+
   geom_bar()+
@@ -20,7 +20,7 @@ ggplot(data,aes(V7,fill=V3))+
 ```
 
 How size affects the alignments
-```{r}
+```{r dev='svg'}
 ggplot(data,aes(V7,V6,fill=V3))+
   geom_boxplot()+
   theme_bw()+ labs(x="")+
@@ -28,7 +28,7 @@ ggplot(data,aes(V7,V6,fill=V3))+
 ```
 
 How changes affect the alignment
-```{r}
+```{r dev='svg'}
 ggplot(data,aes(V7,fill=changes))+
   geom_bar()+
   theme_bw()+ labs(x="")+
