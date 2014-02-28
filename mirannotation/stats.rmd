@@ -1,19 +1,26 @@
 ```{r}
 data<-read.table("stats",skip=1)
-data$V4<-data$V4/abs(data$V4)
-data$V4[data$V4==1]<-"Add"
-data$V4[data$V4==-1]<-"Na"
+data$V2<-as.character(data$V2)
+data$V4<-as.character(data$V4)
 data$V5<-data$V5/abs(data$V5)
-data$V5[data$V5==1]<-"Mut"
+data$V5[data$V5==1]<-"Add"
 data$V5[data$V5==-1]<-"Na"
-data$changes<-paste(data$V4,data$V5)
+data$V6<-data$V6/abs(data$V6)
+data$V6[data$V6==1]<-"Mut"
+data$V6[data$V6==-1]<-"Na"
+data$changes<-paste(data$V5,data$V6)
+data$TP<-apply(data[,c(2,4)],1,function(x){
+  v<-grep(x[1],x[2],ignore.case=T)
+  if (length(v)==0){v<-0}
+  return (v)
+})
 ```
 
 
 Proportion of mapped and no-mapped sequences
 ```{r dev='svg'}
 library(ggplot2)
-ggplot(data,aes(V7,fill=V3))+
+ggplot(data,aes(V8,fill=V3))+
   geom_bar()+
   theme_bw()+ labs(x="")+
   scale_fill_brewer("mapped",palette="Set1")
@@ -21,7 +28,7 @@ ggplot(data,aes(V7,fill=V3))+
 
 How size affects the alignments
 ```{r dev='svg'}
-ggplot(data,aes(V7,V6,fill=V3))+
+ggplot(data,aes(V8,V7,fill=V3))+
   geom_boxplot()+
   theme_bw()+ labs(x="")+
   scale_fill_brewer("mapped",palette="Set1")
@@ -29,11 +36,20 @@ ggplot(data,aes(V7,V6,fill=V3))+
 
 How changes affect the alignment
 ```{r dev='svg'}
-ggplot(data,aes(V7,fill=changes))+
+ggplot(data,aes(V8,fill=changes))+
   geom_bar()+
   theme_bw()+ labs(x="")+
   facet_wrap(~V3)+
   scale_fill_brewer("changes",palette="Set1")
+```
+
+
+How many were assigned to the correct miRNA
+```{r dev='svg'}
+ggplot(data[data$V3=="yes",],aes(V8,fill=factor(TP)))+
+  geom_bar()+
+  theme_bw()+ labs(x="")+
+  scale_fill_brewer("correct",palette="Set1")
 ```
 
 
