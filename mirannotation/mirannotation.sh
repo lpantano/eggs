@@ -11,7 +11,7 @@ gunzip hairpin.fa.gz miRNA.str.gz
 
 awk '{if ($0~/>/){print name"\t"seq;name=$1;seq=""}else{seq=seq$0}}' hairpin.fa | grep "^>hsa" | sed "s/U/T/g" | sed 's/\t/\n/' > hairpin.hsa.fa
 
-python "$SB_HOME"/misc/miRNA.simulator.py -f hairpin.hsa.fa -m miRNA.str -n 1 -s hsa > sim.20.hsa.fa
+python "$SB_HOME"/misc/miRNA.simulator.py -f hairpin.hsa.fa -m miRNA.str -n 10 -s hsa > sim.20.hsa.fa
 
 mkdir -p miraligner
 cd miraligner
@@ -33,8 +33,8 @@ cd ..
 mkdir -p gem
 cd gem
  gem-indexer -i ../hairpin.hsa.fa  -o mirgem --complement 'yes' 
- gem-mapper -I mirgem.gem -i ../sim.20.hsa.fa -o sim.20.hsa 
- gem-2-sam  -I mirgem.gem -i sim.20.hsa.map -o sim.20.hsa.sam
+ gem-mapper -e 0.1 -m 0.1 -I mirgem.gem -i ../sim.20.hsa.fa -o sim.20.hsa 
+ gem-2-sam   -I mirgem.gem -i sim.20.hsa.map -o sim.20.hsa.sam
 cd ..
 
 python check.align.py > stats
