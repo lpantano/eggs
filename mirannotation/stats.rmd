@@ -44,7 +44,7 @@ ggplot(data,aes(V8,fill=changes))+
 ```
 
 
-How many were assigned to the correct miRNA
+How many were assigned to only the correct miRNA. Normally miRNA can map to other miRNAs that are from the same family. "Red" will be sequences mapping to multiple miRNAs.
 ```{r dev='svg'}
 ggplot(data[data$V3=="yes",],aes(V8,fill=factor(TP)))+
   geom_bar()+
