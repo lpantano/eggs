@@ -3,6 +3,7 @@
 #load simulated reads
 sim=open('sim.20.hsa.fa','r')
 data={}
+dataseq={}
 lendata={}
 name=""
 for line in sim:
@@ -14,6 +15,7 @@ for line in sim:
 		#print name
 	else:
 		lendata[name]=len(line)
+		dataseq[line]=name
 sim.close()
 
 #load miraligner results
@@ -80,6 +82,40 @@ for k in data.keys():
 		add=k.find("add")
 		mut=k.find("mut")
 		print "%s\t%s\tno\tNA\t%s\t%s\t%s\tnovocraft" % (k,data[k],add,mut,lendata[k])
+
+
+#load srnabench results
+check={}
+mir=open('srnabench/reads_orig.fa')
+srna={}
+name=""
+for line in mir:
+	line=line.strip()
+	if (line.find(">")>=0): 
+		name=line.replace(">","")
+	else:
+		srna[name]=line
+mir.close()
+
+mir=open('srnabench/hairpin.parsed')
+for line in mir:
+	cols=line.split("\t")
+	seq=srna[cols[0]]
+	if (cols[2].find("hsa")>=0) and (not check.has_key(dataseq[seq])):
+		slot=cols[2].split("-")
+		add=dataseq[seq].find("add")
+		mut=dataseq[seq].find("mut")
+		check[dataseq[seq]]=1
+		print "%s\t%s\tyes\t%s\t%s\t%s\t%s\tsrnabench" %(dataseq[seq],"-".join(slot[0:3]),data[dataseq[seq]],add,mut,lendata[dataseq[seq]])
+mir.close()
+
+#if not aligned, print them here
+for k in data.keys():
+	if not check.has_key(k):
+		add=k.find("add")
+		mut=k.find("mut")
+		print "%s\t%s\tno\tNA\t%s\t%s\t%s\tsrnabench" % (k,data[k],add,mut,lendata[k])
+
 
 #load GEM results
 check={}
