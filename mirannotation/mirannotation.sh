@@ -9,6 +9,9 @@ export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
 SB_HOME=~/repos/seqbuster/
 SB_DB="$SB_HOME/modules/miraligner/DB"
+RNAB_DB="~/soft/srnabench-db/sRNAbenchDB"
+RNAB="~/soft/srnabench/"
+
 echo "download miRBase files"
 wget -q ftp://mirbase.org/pub/mirbase/CURRENT/hairpin.fa.gz
 wget -q ftp://mirbase.org/pub/mirbase/CURRENT/miRNA.str.gz
@@ -43,6 +46,13 @@ cd gem
  gem-2-sam   -I mirgem.gem -i sim.20.hsa.map -o sim.20.hsa.sam
 cd ..
 
+mkdir -p srnabench
+cd srnabench
+java -jar $RNAB/sRNAbench.jar  dbPath=$RNAB_DB microRNA=hsa input=sim.20.hsa.fa output=srnabench libs=hg19-tRNA isoMiR=true
+cd ..
+
 python check.align.py > stats
 
 echo "now time to run stats.rmd"
+
+
