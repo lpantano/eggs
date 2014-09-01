@@ -60,3 +60,20 @@ ggplot(data[data$V3=="yes",],aes(V8,fill=factor(TP)))+
 ```
 
 
+# isomirs
+
+```{r load-iso}
+stat_iso <- read.table("isomirs_stats.tsv")
+```
+
+```{r uniquely}
+uniquely = subset(stat_iso, V8 == 1)
+multi = subset(stat_iso, V8 > 1)
+```
+
+Number of sequences with multihits `r length(unique(multi[,1]))` and 
+uniquelye mapped `r nrow(uniquely)`.
+
+```{r correct}
+uniquely$dif5 <- uniquely$V6 - uniquely$V4
+```
