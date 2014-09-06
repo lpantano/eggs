@@ -13,19 +13,20 @@ class realSeq:
 
 def _read_miraligner(in_file):
     """read miraligner results"""
+    print "name is_mir is_mut is_add is_t5 is_t3 tool"
     with open(in_file) as in_handle:
         in_handle.readline()
         for line in in_handle:
             cols = line.strip().split("\t")
             logger.debug(line)
             ok_mir, ok_add, ok_mut, ok_t5, ok_t3 = _check_pos(cols[1], cols[2], cols[5], cols[6], cols[7], cols[8])
-            print "%s %s %s %s %s %s" % (cols[1], ok_mir, ok_mut, ok_add, ok_t5, ok_t3)
+            print "%s %s %s %s %s %s miraligner" % (cols[1], ok_mir, ok_mut, ok_add, ok_t5, ok_t3)
             logger.debug("res %s %s %s %s %s %s" % (cols[1], ok_mir, ok_mut, ok_add, ok_t5, ok_t3))
 
 
 def _check_pos(name, chr, mut, add, t5, t3):
     """compare name of the seq with position map"""
-    ok_mir, ok_add, ok_mut, ok_t5, ok_t3 = 0, 0, 0, 0, 0
+    ok_mir, ok_add, ok_mut, ok_t5, ok_t3 = False, False, False, False, False
     cref = name.split("_")[1].lower()
     cquery = chr.lower()
     logger.debug("%s %s" % (cref, cquery))
