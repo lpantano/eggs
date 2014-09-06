@@ -25,7 +25,8 @@ def _read_miraligner(in_file):
 
 
 def _check_pos(name, chr, mut, add, t5, t3):
-    """compare name of the seq with position map"""
+    """compare name of the seq with position map
+    just compatible with miraligner"""
     ok_mir, ok_add, ok_mut, ok_t5, ok_t3 = False, False, False, False, False
     cref = name.split("_")[1].lower()
     cquery = chr.lower()
