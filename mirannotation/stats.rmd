@@ -10,11 +10,11 @@ data<-read.table("stats",skip=1)
 data$V2<-as.character(data$V2)
 data$V4<-as.character(data$V4)
 data$V5<-data$V5/abs(data$V5)
-data$V5[data$V5==1]<-"Add"
-data$V5[data$V5==-1]<-"Na"
+data$V5[data$V5==1]<-"Na"
+data$V5[data$V5==-1]<-"Add"
 data$V6<-data$V6/abs(data$V6)
-data$V6[data$V6==1]<-"Mut"
-data$V6[data$V6==-1]<-"Na"
+data$V6[data$V6==1]<-"Na"
+data$V6[data$V6==-1]<-"Mut"
 data$changes<-paste(data$V5,data$V6)
 data$TP<-apply(data[,c(2,4)],1,function(x){
   v<-grep(x[1],x[2],ignore.case=T)
@@ -47,7 +47,7 @@ ggplot(data,aes(V8,fill=changes))+
   geom_bar()+
   theme_bw()+ labs(x="")+
   facet_wrap(~V3)+
-  scale_fill_brewer("changes",palette="Set1")
+  scale_fill_brewer("changes",palette="Set1") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 
@@ -56,24 +56,7 @@ How many were assigned to only the correct miRNA. Normally miRNA can map to othe
 ggplot(data[data$V3=="yes",],aes(V8,fill=factor(TP)))+
   geom_bar()+
   theme_bw()+ labs(x="")+
-  scale_fill_brewer("correct",palette="Set1")
+  scale_fill_brewer("correct",palette="Set1") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 
-# isomirs
-
-```{r load-iso}
-stat_iso <- read.table("isomirs_stats.tsv")
-```
-
-```{r uniquely}
-uniquely = subset(stat_iso, V8 == 1)
-multi = subset(stat_iso, V8 > 1)
-```
-
-Number of sequences with multihits `r length(unique(multi[,1]))` and 
-uniquelye mapped `r nrow(uniquely)`.
-
-```{r correct}
-uniquely$dif5 <- uniquely$V6 - uniquely$V4
-```

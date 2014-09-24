@@ -6,66 +6,32 @@ opts_chunk$set(tidy=TRUE, highlight=T, figalign="center",
 
 
 ```{r load}
-data<-read.table("stats_isomirs", header=T)
+data<-read.table("stats_isomirs_full", header=T)
 ```
 
 
-Correct isomir annotation for miraligner.
+Correct isomir annotation for miraligner and srnabench.
 
 ```{r iso}
 library(ggplot2)
 library(reshape)
-data_gg <- melt(data,id.vars = "name")
-ggplot(data_gg, aes(variable, fill = value)) +
+data_gg <- melt(data,id.vars = c("name","is_iso","tool","find"))
+ggplot(data_gg, aes(tool, fill = is_iso)) +
     geom_bar() +
-    scale_fill_brewer(palette = "Set1")
-    theme_bw()
+    scale_fill_brewer(palette = "Set1") +
+    theme_bw() +
+    facet_wrap("find")
 ```
 
-The majority are correct, but there are some errors are addition and 3' trimming 
-annotation. It makes sense because it could be an addition that match the 
-reference by chance, but the tool will determine as trimming and no addition.
-How size affects the alignments
-```{r dev='svg'}
-ggplot(data,aes(V8,V7,fill=V3))+
-  geom_boxplot()+
-  theme_bw()+ labs(x="")+
-  scale_fill_brewer("mapped",palette="Set1")
-```
 
-How changes affect the alignment
-```{r dev='svg',fig.width=9}
-ggplot(data,aes(V8,fill=changes))+
+Accuracy of correct isomirs.
+
+```{r }
+data_gg_ann <- melt(subset(data, is_mir=="True"),id.vars = c("name","is_iso","tool","find"))
+ggplot(subset(data_gg_ann, is_iso == "True" & find == "Yes" ), aes(variable, fill=value))+
   geom_bar()+
-  theme_bw()+ labs(x="")+
-  facet_wrap(~V3)+
-  scale_fill_brewer("changes",palette="Set1")
+  theme_bw()+
+  scale_fill_brewer("correct",palette="Set1")+
+  facet_wrap(~tool)
 ```
 
-
-How many were assigned to only the correct miRNA. Normally miRNA can map to other miRNAs that are from the same family. "Red" will be sequences mapping to multiple miRNAs.
-```{r dev='svg'}
-ggplot(data[data$V3=="yes",],aes(V8,fill=factor(TP)))+
-  geom_bar()+
-  theme_bw()+ labs(x="")+
-  scale_fill_brewer("correct",palette="Set1")
-```
-
-
-# isomirs
-
-```{r load-iso}
-stat_iso <- read.table("isomirs_stats.tsv")
-```
-
-```{r uniquely}
-uniquely = subset(stat_iso, V8 == 1)
-multi = subset(stat_iso, V8 > 1)
-```
-
-Number of sequences with multihits `r length(unique(multi[,1]))` and 
-uniquelye mapped `r nrow(uniquely)`.
-
-```{r correct}
-uniquely$dif5 <- uniquely$V6 - uniquely$V4
-```

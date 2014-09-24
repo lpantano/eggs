@@ -10,7 +10,7 @@ export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 SB_HOME=~/repos/seqbuster/
 SB_DB="$SB_HOME/modules/miraligner/DB"
 RNAB_DB="~/soft/srnabench-db/sRNAbenchDB"
-RNAB="~/soft/srnabench/"
+RNAB="~/soft/srnabench"
 
 echo "download miRBase files"
 wget -q ftp://mirbase.org/pub/mirbase/CURRENT/hairpin.fa.gz
@@ -48,7 +48,12 @@ cd ..
 
 mkdir -p srnabench
 cd srnabench
-java -jar $RNAB/sRNAbench.jar  dbPath=$RNAB_DB microRNA=hsa input=sim.20.hsa.fa output=srnabench libs=hg19-tRNA isoMiR=true
+java -jar $RNAB/sRNAbench.jar  dbPath=$RNAB_DB microRNA=hsa input=sim.20.hsa.fa output=srnabench isoMiR=true
+cd ..
+
+mkdir microrazer
+cd mircrorazer
+micro_razers64 -o sim.20.hsa.res -sL 10 ../hairpin.fa ../sim.20.hsa.fa
 cd ..
 
 python check.align.py > stats
