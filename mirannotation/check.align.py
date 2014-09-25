@@ -8,13 +8,13 @@ lendata={}
 name=""
 for line in sim:
     line=line.strip()
-    if (line.find(">")>=0):
+    if line.startswith(">"):
         name=line.replace(">","")
         slot=name.split("_")[0].split("-")
         data[name]="-".join(slot[0:3])
-        #print name
-else:
+    else:
         lendata[name]=len(line)
+        #print name
         dataseq[line]=name
 sim.close()
 
@@ -154,6 +154,6 @@ mir.close()
 #if not aligned, print them here
 for k in data.keys():
 	if not check.has_key(k):
-		add=k.find("add")
-		mut=k.find("mut")
-		print "%s\t%s\tno\tNA\t%s\t%s\t%s\tmicrorazer" % (k,data[k],add,mut,lendata[k])
+            add=k.find("add:null")
+            mut=k.find("mut:null")
+            print "%s\t%s\tno\tNA\t%s\t%s\t%s\tmicrorazer" % (k,data[k],add,mut,lendata[k])
