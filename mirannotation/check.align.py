@@ -63,6 +63,27 @@ for k in data.keys():
         mut=k.find("mut:null")
         print "%s\t%s\tno\tNA\t%s\t%s\t%s\tbowtie2" % (k,data[k],add,mut,lendata[k])
 
+#load bwotie results
+check={}
+mir=open('bowtie/sim.20.hsa.sam')
+for line in mir:
+    cols=line.split("\t")
+    if (cols[2].find("hsa")>=0) and (not check.has_key(cols[0])):
+            check[cols[0]]=1
+            slot=cols[2].split("-")
+            add=cols[0].find("add:null")
+            mut=cols[0].find("mut:null")
+            print "%s\t%s\tyes\t%s\t%s\t%s\t%s\tbowtie" %(cols[0],cols[2],cols[0].split("_")[0],add,mut,lendata[cols[0]])
+mir.close()
+
+#if not aligned, print them here
+for k in data.keys():
+    if not check.has_key(k):
+        add=k.find("add:null")
+        mut=k.find("mut:null")
+        print "%s\t%s\tno\tNA\t%s\t%s\t%s\tbowtie" % (k,data[k],add,mut,lendata[k])
+
+
 #load novoaligner results
 check={}
 mir=open('novo/sim.20.novo.sam')
