@@ -1,7 +1,25 @@
-```{r setup, echo=FALSE}
+---
+title: "miRNA annotation"
+author: "Lorena Pantano"
+date: "10/10/2014"
+output:
+  knitrBootstrap::bootstrap_document:
+    theme: readable
+    highlight: zenburn
+    theme.chooser: TRUE
+    highlight.chooser: TRUE
+  html_document:
+    highlight: zenburn
+
+---
+
+```{r setup}
 library(knitr)
-opts_chunk$set(tidy=TRUE, highlight=T, figalign="center",
- fig.height=6, fig.width=6, message=F, error=F, warning=F)
+library(rmarkdown)
+library(knitrBootstrap)
+
+opts_chunk$set(tidy=TRUE, highlight=T, figalign="center", cache=T,
+               fig.height=6, fig.width=10, message=F, error=F, warning=F, bootstrap.show.code=FALSE)
 ```
 
 
@@ -23,7 +41,7 @@ data$TP<-apply(data[,c(2,4)],1,function(x){
 })
 ```
 
-
+# Mapped
 Proportion of mapped and no-mapped sequences
 ```{r dev='svg'}
 library(ggplot2)
@@ -33,6 +51,8 @@ ggplot(data,aes(V8,fill=V3))+
   scale_fill_brewer("mapped",palette="Set1")
 ```
 
+
+# Size effect
 How size affects the alignments
 ```{r dev='svg'}
 ggplot(data,aes(V8,V7,fill=V3))+
@@ -41,6 +61,7 @@ ggplot(data,aes(V8,V7,fill=V3))+
   scale_fill_brewer("mapped",palette="Set1")
 ```
 
+# Isomirs effect
 How changes affect the alignment
 ```{r dev='svg',fig.width=9}
 ggplot(data,aes(V8,fill=changes))+
@@ -51,6 +72,7 @@ ggplot(data,aes(V8,fill=changes))+
 ```
 
 
+# Specificity
 How many were assigned to only the correct miRNA. Normally miRNA can map to other miRNAs that are from the same family. "Red" will be sequences mapping to multiple miRNAs.
 ```{r dev='svg'}
 ggplot(data[data$V3=="yes",],aes(V8,fill=factor(TP)))+
