@@ -33,6 +33,12 @@ cd bowtie2
  bowtie2 -D 20 -R 3 -N 0 -L 10 -i S,1,0.50 -f -x mirbowtie2 -U ../sim.20.hsa.fa -S sim.20.hsa.sam
 cd ..
 
+mkdir -p bowtie
+cd bowtie
+ bowtie-build ../hairpin.hsa.fa mirbowtie
+ bowtie  -a --best --strata  -n 1 -l 16 -f mirbowtie  ../sim.20.hsa.fa -S sim.20.hsa.sam
+cd ..
+
 mkdir -p novo
 cd novo
  novoindex -k 14 -s 2 -m mirnovo ../hairpin.hsa.fa  
