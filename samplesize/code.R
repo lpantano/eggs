@@ -59,21 +59,35 @@ do_de <- function(size){
     print(size)   
     do.call(cbind,lapply(1:400,get_estimation,size))
 }
-
-#tab <- lapply(c(2,5,10,45),do_de)
+library(BiocParallel)
+sizes = c(2,5,7,10,13,15,20,25,30,35,45)
+#tab <- bplapply(sizes, do_de, BPPARAM = MulticoreParam(2))
+####tab <- lapply(c(2,5,7,10,13,15,20,25,30,35,45),do_de)
+#save(tab,file="obj.rda")
+#summarize
 summary_de <- function(ma){
     ma <- as.data.frame(ma[1:5000,]) 
     rank <- 1:nrow(ma)
-    low <- apply(ma,1,quantile, .001) 
-    up <- apply(ma,1,quantile, .099) 
-    q = data.frame(rank=rank, low=low, up=up)
-    l <- predict(loess(low ~ rank, data=q), se =T)
-    low <- l$fit - qt(0.975,l$df)*l$se
-    up <- l$fit + qt(0.975,l$df)*l$se
-    data.frame(rank = q$rank, low=low, up=up)
+    low <- apply(ma,1,quantile, .025) 
+    up <- apply(ma,1,quantile, .975) 
+    data.frame(rank=rank, low=low, up=up)
+    #l <- predict(loess(low ~ rank, data=q), se =T)
+    #low <- l$fit - qt(0.975,l$df)*l$se
+    #up <- l$fit + qt(0.975,l$df)*l$se
+    #data.frame(rank = q$rank, low=low, up=up)
 }
-tab.sum <- lapply(tab,summary_de)
-#tab <- lapply(c(2),do_de)
-#tab.join <- do.call(rbind,tab)
+#tab.sum <- lapply(tab,summary_de)
+tab.join.low <- do.call(cbind,lapply(tab.sum,function(x){x[,2,drop=FALSE]}))
+tab.join.up <- do.call(cbind,lapply(tab.sum,function(x){x[,3,drop=FALSE]}))
 
+low.model <- apply(tab.join.low, 1, function(x){
+      rank = sizes
+      spline(x ~ rank)})
 
+up.model <- apply(tab.join.up, 1, function(x){
+      rank = sizes
+      loess(x ~ rank)})
+
+save(low.model,file="low.model.rda")
+save(up.model,file="up.model.rda")
+save(sizes, file="sizes.rda")
