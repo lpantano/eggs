@@ -141,8 +141,7 @@ def  _check_pos_srnabench(name, chr, isoclass, nucvar):
         ok_t3 = True
     if not ok_t5 and t5_ref == "0":
         ok_t5 = True
-
-    if isoclass == "mv" and (t3_ref != "0" + t5_ref != "0" + add_ref != "null") > 1:
+    if isoclass == "mv" and sum([t3_ref != "0", t5_ref != "0", add_ref != "null"]) > 1:
         ok_t3, ok_t5, ok_add = True, True, True
         info = False
     if nucvar != "-" and mut_ref != "null":
@@ -151,6 +150,7 @@ def  _check_pos_srnabench(name, chr, isoclass, nucvar):
         ok_mut = True
     if cquery == cref:
         ok_mir = True
+    logger.debug("_check_pos_srnabench: info %s ok_t3 %s ok_t5 %s" % (info, ok_t5, ok_t3))
     return ok_mir, ok_add, ok_mut, ok_t5, ok_t3, info
 
 
