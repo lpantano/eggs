@@ -1,4 +1,4 @@
-seq known correct t5 t3 mut add mapped
+seq known correct t5 t3 mut add mapped amb
 hsa-mir-449a_hsa-miR-449a_17:35_1:-2_mut:null_add:T hsa-miR-449a True True False True False hsa-miR-449b-5p 2
 hsa-mir-7846_hsa-miR-7846-3p_69:88_1:0_mut:null_add:ATT hsa-miR-7846-3p True False False True False hsa-miR-7846-3p 1
 hsa-mir-128-2_hsa-miR-128-2-5p_16:35_1:-2_mut:null_add:null hsa-miR-128-2-5p True True False False False hsa-miR-128-2-5p 1
