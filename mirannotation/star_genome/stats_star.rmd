@@ -20,7 +20,7 @@ library(rmarkdown)
 library(knitrBootstrap)
 
 opts_chunk$set(tidy=TRUE, highlight=T, figalign="center",
- fig.height=6, fig.width=6, message=F, error=F, warning=F)
+ fig.height=6, fig.width=6, message=F, error=F, warning=F, cache=T)
 ```
 
 
@@ -31,8 +31,8 @@ data_filtered<-read.table("sim.20.hsa.primary.dat", header=T)
 
 # Overview
 
-The idea of this report is to show how well miraligner and srnabench are decting
-isomiRs. I simulated a bunch of isomirs (~16900) that can have the folowing variation:
+The idea of this report is to show how well STAR is decting
+isomiRs using the genome as reference. I simulated a bunch of isomirs (~16900) that can have the folowing variation:
 
 * starts at different position than the reference miRNA: t5
 * ends at different position than the reference miRNA: t3
@@ -40,6 +40,7 @@ isomiRs. I simulated a bunch of isomirs (~16900) that can have the folowing vari
 * have nt addition at the end: add
 
 ## Methods
+
 
 `bash map_star.sh sim.20.hsa.fa`
 `bamtools filter -isPrimaryAlignment True -in sim.20.hsa.bam -out sim.20.hsa.primary.bam `
@@ -81,7 +82,7 @@ ggplot(data, aes(correct, fill = factor(amb))) +
 
 ## no filtering
 
-16377 mapped to the genome and were kept after filtering. And 12549
+16377 mapped to the genome. And 12549
 overlapped with any miRNA.
 
 ### detection
