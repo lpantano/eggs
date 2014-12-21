@@ -74,7 +74,7 @@ Many people filter out the sequences that map multiple times on the genome.
 I count the times the sequence was mapping to another miRNA.
 
 ```{r m}
-ggplot(data, aes(correct, fill = factor(amb))) +
+ggplot(data_filtered, aes(correct, fill = factor(amb))) +
     geom_bar() +
     scale_fill_brewer("number of times annotated",palette = "Set1") +
     theme_bw() 
