@@ -201,4 +201,30 @@ for k in data.keys():
         mut=k.find("mut:null")
         print "%s\t%s\tno\tNA\t%s\t%s\t%s\tstar" % (k,data[k],add,mut,lendata[k])
 
+# load miRExpress results
+check={}
+mir=open('mirexpress/out/read_align_premiRNA.txt')
+for line in mir:
+    if line.startswith("hsa"):
+        ref = line.strip()
+        continue
+    if line.find("(") > 0:
+        continue
+    cols = line.split()
+    if (line.find("hsa")<0) and (line.find("10") >= 0) and (not check.has_key(cols[0])):
+        name = dataseq[cols[0]]
+        slot=name.split("-")
+        add=name.find("add:null")
+        mut=name.find("mut:null")
+        check[name] = 1
+        print "%s\t%s\tyes\t%s\t%s\t%s\t%s\tmirexpress" %(name,ref,name.split("_")[0],add,mut,lendata[name])
+mir.close()
+
+# if not aligned, print them here
+for k in data.keys():
+    if not check.has_key(k):
+        add=k.find("add:null")
+        mut=k.find("mut:null")
+        print "%s\t%s\tno\tNA\t%s\t%s\t%s\tmirexpress" % (k,data[k],add,mut,lendata[k])
+
 

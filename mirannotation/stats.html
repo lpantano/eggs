@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Lorena Pantano" />
-  <meta name="date" content="2014-10-10" />
+  <meta name="date" content="2015-12-02" />
   <title>miRNA annotation</title>
   <style type="text/css">code{white-space: pre;}</style>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -866,7 +866,7 @@
 <div id="header">
 <h1 class="title">miRNA annotation</h1>
 <h2 class="author">Lorena Pantano</h2>
-<h3 class="date">10/10/2014</h3>
+<h3 class="date">18/02/2015</h3>
 </div>
 <div id="wrap">
 <div class="container">
@@ -875,7 +875,8 @@
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
-</button><pre style="display:none"><code class="source r">library(knitr)
+</button>
+<pre style="display:none"><code class="source r">library(knitr)
 library(rmarkdown)
 library(knitrBootstrap)
 
@@ -885,7 +886,8 @@ opts_chunk$set(tidy=TRUE, highlight=T, figalign="center", cache=T,
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
-</button><pre style="display:none"><code class="source r">data<-read.table("stats",skip=1)
+</button>
+<pre style="display:none"><code class="source r">data<-read.table("stats",skip=1)
 data$V2<-as.character(data$V2)
 data$V4<-as.character(data$V4)
 data$V5<-data$V5/abs(data$V5)
@@ -906,7 +908,8 @@ Proportion of mapped and no-mapped sequences
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
-</button><pre style="display:none"><code class="source r">library(ggplot2)
+</button>
+<pre style="display:none"><code class="source r">library(ggplot2)
 ggplot(data,aes(V8,fill=V3))+
   geom_bar()+
   theme_bw()+ labs(x="")+
@@ -922,7 +925,8 @@ How size affects the alignments
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
-</button><pre style="display:none"><code class="source r">ggplot(data,aes(V8,V7,fill=V3))+
+</button>
+<pre style="display:none"><code class="source r">ggplot(data,aes(V8,V7,fill=V3))+
   geom_boxplot()+
   theme_bw()+ labs(x="")+
   scale_fill_brewer("mapped",palette="Set1")</code></pre>
@@ -937,7 +941,8 @@ How changes affect the alignment
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
-</button><pre style="display:none"><code class="source r">ggplot(data,aes(V8,fill=changes))+
+</button>
+<pre style="display:none"><code class="source r">ggplot(data,aes(V8,fill=changes))+
   geom_bar()+
   theme_bw()+ labs(x="")+
   facet_wrap(~V3)+
@@ -953,7 +958,8 @@ How many were assigned to only the correct miRNA. Normally miRNA can map to othe
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
-</button><pre style="display:none"><code class="source r">ggplot(data[data$V3=="yes",],aes(V8,fill=factor(TP)))+
+</button>
+<pre style="display:none"><code class="source r">ggplot(data[data$V3=="yes",],aes(V8,fill=factor(TP)))+
   geom_bar()+
   theme_bw()+ labs(x="")+
   scale_fill_brewer("correct",palette="Set1") + theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
@@ -973,142 +979,144 @@ How many were assigned to only the correct miRNA. Normally miRNA can map to othe
 </button>
 </div>
 <div id="bottom-navbar" class="navbar-collapse collapse navbar-responsive-collapse">
-<ul class="nav navbar-nav navbar-right"><li class="nav"><p class="navbar-text">
+<ul class="nav navbar-nav navbar-right">
+<li class="nav">
+<p class="navbar-text">
 Toggle
-</p></li>
-<li class="dropup">
-<a href="#" class="dropdown-toggle" data-toggle="dropdown">Code <b class="caret"></b></a>
-<ul class="dropdown-menu"><li class="dropdown-header">
-Languages
+</p>
 </li>
-<li class="active">
-<a href="#" class="toggle-global source R" type="source.R">R</a>
-</li>
-<li >
-<a href="#" type="all-source" class="toggle-global">All</a>
-</li></ul></li>
-
 <li class="active">
 <a href="#" type="figure" class="toggle-global">Figures</a>
-</li></ul>
-<ul class="nav navbar-nav navbar-left"><li class="dropup">
+</li>
+</ul>
+<ul class="nav navbar-nav navbar-left">
+<li class="dropup">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bootstrap theme <b class="caret"></b></a>
-<ul class="dropdown-menu"><li >
+<ul class="dropdown-menu">
+<li>
 <a class="theme-switch" title="Default" href="#">Default</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Amelia" href="#">Amelia</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Cerulean" href="#">Cerulean</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Cosmo" href="#">Cosmo</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Cyborg" href="#">Cyborg</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Journal" href="#">Journal</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Flatly" href="#">Flatly</a>
 </li>
 <li class="active">
 <a class="theme-switch" title="Readable" href="#">Readable</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Simplex" href="#">Simplex</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Slate" href="#">Slate</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="Spacelab" href="#">Spacelab</a>
 </li>
-<li >
+<li>
 <a class="theme-switch" title="United" href="#">United</a>
-</li></ul></li></ul>
-<ul class="nav navbar-nav navbar-left"><li class="dropup">
+</li>
+</ul>
+</li>
+</ul>
+<ul class="nav navbar-nav navbar-left">
+<li class="dropup">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Code highlighting <b class="caret"></b></a>
-<ul class="dropdown-menu"><li >
+<ul class="dropdown-menu">
+<li>
 <a class="highlight-switch" title="HighlightJs" href="#">HighlightJs</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Dark" href="#">Dark</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Far" href="#">Far</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Idea" href="#">Idea</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Sunburst" href="#">Sunburst</a>
 </li>
 <li class="active">
 <a class="highlight-switch" title="Zenburn" href="#">Zenburn</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Visual Studio" href="#">Visual Studio</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Ascetic" href="#">Ascetic</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Magula" href="#">Magula</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Github" href="#">Github</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Google Code" href="#">Google Code</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Brown Paper" href="#">Brown Paper</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="School Book" href="#">School Book</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="IR Black" href="#">IR Black</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Solarized - Dark" href="#">Solarized - Dark</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Solarized - Light" href="#">Solarized - Light</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Arta" href="#">Arta</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Monokai" href="#">Monokai</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Xcode" href="#">Xcode</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Pojoaque" href="#">Pojoaque</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Rainbow" href="#">Rainbow</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Tomorrow" href="#">Tomorrow</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Tomorrow Night" href="#">Tomorrow Night</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Tomorrow Night Bright" href="#">Tomorrow Night Bright</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Tomorrow Night Blue" href="#">Tomorrow Night Blue</a>
 </li>
-<li >
+<li>
 <a class="highlight-switch" title="Tomorrow Night Eighties" href="#">Tomorrow Night Eighties</a>
-</li></ul></li></ul>
+</li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 </div>
