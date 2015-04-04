@@ -1,0 +1,1087 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Lorena Pantano" />
+  <meta name="date" content="2014-10-10" />
+  <title>isomiR annotation</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  
+  <!-- bootstrap -->
+  <!--<link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"  id="style">-->
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  
+  <!-- highlight.js -->
+  <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/default.min.css" rel="stylesheet" id="code-style">-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/highlight.min.js"></script>
+  <script>
+  hljs.LANGUAGES.r=function(a){var b="([a-zA-Z]|\\.[a-zA-Z.])[a-zA-Z0-9._]*";return{c:[a.HCM,{b:b,l:b,k:{keyword:"function if in break next repeat else for return switch while try tryCatch|10 stop warning require library attach detach source setMethod setGeneric setGroupGeneric setClass ...|10",literal:"NULL NA TRUE FALSE T F Inf NaN NA_integer_|10 NA_real_|10 NA_character_|10 NA_complex_|10"},r:0},{cN:"number",b:"0[xX][0-9a-fA-F]+[Li]?\\b",r:0},{cN:"number",b:"\\d+(?:[eE][+\\-]?\\d*)?L\\b",r:0},{cN:"number",b:"\\d+\\.(?!\\d)(?:i\\b)?",r:0},{cN:"number",b:"\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",r:0},{b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[a.BE],r:0},{cN:"string",b:"'",e:"'",c:[a.BE],r:0}]}}(hljs); </script>
+  <!--<script type="text/javascript", src="https://yandex.st/highlightjs/7.3/languages/r.min.js"></script>-->
+  
+  <!-- Manific Popup -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.8.9/jquery.magnific-popup.min.js"></script>
+  
+  <script type="text/javascript"
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script defer="defer">
+  // Function to generate the dynamic table of contents
+  jQuery.fn.generate_TOC = function () {
+    var base = $(this[0]);
+  
+    var selectors = ['h1', 'h2', 'h3', 'h4'];
+  
+    var last_ptr = [{}, {}, {}, {}];
+  
+    var anchors = {};
+  
+    generate_anchor = function (text) {
+      var test = text.replace(/\W/g, '_');
+  
+      while(test in anchors){
+        //if no suffix, add one
+        if(test.match(/_\d+$/) === null){
+          test = test + "_2";
+        }
+        //else generate unique id for duplicates by adding one to the suffix
+        else {
+          test = test.replace(/_(\d+)$/, function(match, number){ var num=+number+1; return("_" + num) });
+        }
+      }
+      anchors[test]=1;
+      return(test);
+    }
+  
+    $(selectors.join(',')).filter(function(index) { return $(this).parent().attr("id") != 'header'; }).each(function () {
+  
+      var heading = $(this);
+      var idx = selectors.indexOf(heading.prop('tagName').toLowerCase());
+      var itr = 0;
+  
+      while (itr <= idx) {
+        if (jQuery.isEmptyObject(last_ptr[itr])) {
+          last_ptr[itr] = $('<ul>').addClass('nav');
+          if (itr === 0) {
+            base.append(last_ptr[itr])
+          } else {
+            if(last_ptr[itr-1].children('li').length === 0){
+              last_ptr[itr-1].append(last_ptr[itr]);
+            }
+            else {
+              last_ptr[itr - 1].children('li').last().append(last_ptr[itr]);
+            }
+          }
+        }
+        itr++;
+      }
+      var anchor = generate_anchor(heading.text());
+      heading.attr('id', anchor);
+      var a = $('<a>')
+      .text(heading.text())
+      .attr('href', '#' + anchor);
+  
+    var li = $('<li>')
+      .append(a);
+  
+    last_ptr[idx].append(li);
+    for (i = idx + 1; i < last_ptr.length; i++) {
+      last_ptr[i] = {};
+    }
+    });
+  }
+  /* run scripts when document is ready */
+  $(function() {
+    "use strict";
+  
+    var $window = $(window);
+    var $body = $(document.body);
+  
+    /* size of thumbnails */
+  
+    var hidden_types = ['source']
+    var output_types = ['output', 'message', 'warning', 'error']
+  
+    /* style tables */
+    $('table').addClass('table table-striped table-bordered table-hover table-condensed');
+  
+    $('pre code').each(function(i, e) {
+      hljs.highlightBlock(e);
+    });
+  
+    /* Magnific Popup */
+    $(".thumbnail").each(function(){
+      $(this).magnificPopup({
+        disableOn: 768,
+        closeOnContentClick: true,
+  
+        type: 'image',
+        items: {
+          src: $(this).find('img').attr('src'),
+        }
+      });
+    });
+  
+    function toggle_block(obj, show) {
+      var span = obj.find('span');
+      if(show === true){
+        span.removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+        obj.next('pre').slideDown();
+      }
+      else {
+        span.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+        obj.next('pre').slideUp();
+      }
+    }
+  
+    function toggle_thumbnails(imgs, show){
+      if(show === true){
+        imgs.parents().show()
+        imgs.slideDown();
+      }
+      else {
+        imgs.slideUp(400, function(){ $(this).parent().hide(); });
+      }
+    }
+  
+    function global_toggle(obj){
+      var type = obj.attr('type');
+      var show = !obj.parent('li').hasClass('active');
+      if(show === true){
+        obj.parent('li').addClass('active');
+      }
+      else{
+        obj.parent('li').removeClass('active');
+      }
+      if(type == 'figure'){
+        toggle_thumbnails($('.thumbnail img'), show);
+      }
+      else {
+        $('.toggle.' + type).each(function() { toggle_block($(this), show); });
+      }
+    }
+  
+    /* onclick toggle next code block */
+    $('.toggle').click(function() {
+      var span = $(this).find('span');
+      toggle_block($(this), !span.hasClass('glyphicon-chevron-down'));
+      return false
+    })
+  
+    // global toggles
+    $('.toggle-global').click(function(){
+      var type = $(this).attr('type');
+      if(type === 'all-source'){
+          $('li a.source').each(function() {
+            global_toggle($(this));
+          });
+        }
+      else if(type === 'all-output'){
+        $.each(output_types, function(i, val){
+          console.log(val);
+          global_toggle($('li a.' + val));
+        });
+      }
+      else {
+        console.log($(this));
+        global_toggle($(this));
+      }
+      return false;
+    });
+    /* table of contents */
+    if($(['h1', 'h2', 'h3', 'h4'].join(',')).length > 0){
+      $('body > #wrap > .container > .row').append('<div class="col-md-2"><div id="toc" class="well sidebar sidenav affix hidden-print"/></div>');
+      $('#toc').generate_TOC();
+    }
+  
+    $.each(hidden_types, function(i, type) {
+      $('li[type=' + type + ']').each(function(){ global_toggle($(this)); });
+    });
+  
+    /* remove paragraphs with no content */
+    $('p:empty').remove();
+  
+    $body.scrollspy({
+      target: '.sidebar',
+    });
+  
+    /* theme switch */
+    $('.theme-switch').click(function(){
+      var css = $('link[title=' + $(this).attr('title') + ']');
+      $('#theme[rel=stylesheet]').attr('href', css.attr('href'));
+      $('.theme-switch').closest('li').removeClass('active');
+      $(this).closest('li').addClass('active');
+      return false;
+    });
+    /* code style switch */ //TODO use same function for both of these?
+    $('.highlight-switch').click(function(){
+      var css = $('link[title="' + $(this).attr('title') + '"]');
+      $('#highlight[rel=stylesheet]').attr('href', css.attr('href'));
+      $('.highlight-switch').closest('li').removeClass('active');
+      $(this).closest('li').addClass('active');
+      return false;
+    });
+  
+    //TODO refresh on show/hide
+    $window.on('load', function () {
+      $body.scrollspy('refresh');
+    })
+  
+  });
+  
+  </script>
+  <style>
+  /* Knitr_bootstrap styles */
+  #header {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  #wrap .container-fluid {
+    padding: 0;
+    overflow: hidden;
+  }
+  .toggle{
+    text-transform: capitalize;
+  }
+  
+  .toggle-global{
+    text-transform: capitalize;
+  }
+  
+  /* Sticky footer styles */
+  * {
+    margin:0;
+  }
+  html,
+  body {
+      height: 100%;
+      padding:0 !important;
+      /* The html and body elements cannot have any padding or margin. */
+      /*overflow-x: hidden;*/
+  }
+  
+  /* Wrapper for page content to push down footer */
+  #wrap {
+      min-height: 100%;
+      height: auto !important;
+      height: 100%;
+      /* Negative indent footer by it's height */
+      margin: 0 auto -120px;
+  }
+  
+  /* Set the fixed height of the footer here */
+  #push,
+  #footer {
+      height: 120px;
+  }
+  
+  #footer {
+    text-align: center;
+  }
+  
+  /* Top level subheader elements.  These are the first nested items underneath a header element. */
+  .header li {
+    font-size: 20px;
+  }
+  
+  /* Makes the font smaller for all subheader elements. */
+  .sub-header li {
+      font-size: 12px;
+  }
+  
+  button.thumbnails {
+    margin-left:0px;
+  }
+  
+  /*
+   * Side navigation
+   *
+   * Scrollspy and affixed enhanced navigation to highlight sections and secondary
+   * sections of docs content.
+   */
+  
+  /* By default it's not affixed in mobile views, so undo that */
+  .sidebar.affix {
+    position: static;
+  }
+  
+  /* First level of nav */
+  .sidenav {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-top:    10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  /* All levels of nav */
+  .sidebar .nav > li > a {
+    display: block;
+    padding: 5px 20px;
+  }
+  .sidebar .nav > li > a:hover,
+  .sidebar .nav > li > a:focus {
+    text-decoration: none;
+    border-right: 1px solid;
+  }
+  .sidebar .nav > .active > a,
+  .sidebar .nav > .active:hover > a,
+  .sidebar .nav > .active:focus > a {
+    font-weight: bold;
+    background-color: transparent;
+    border-right: 1px solid;
+  }
+  
+  /* Nav: second level (shown on .active) */
+  .sidebar .nav .nav {
+    display: none; /* Hide by default, but at >768px, show it */
+    margin-bottom: 8px;
+  }
+  .sidebar .nav .nav > li > a {
+    padding-top:    3px;
+    padding-bottom: 3px;
+    padding-left: 30px;
+    font-size: 90%;
+  }
+  
+  .sidebar .nav .nav .nav > li > a {
+    padding-left: 40px;
+  }
+  .sidebar .nav .nav .nav .nav > li > a {
+    padding-left: 50px;
+  }
+  
+  /* Show and affix the side nav when space allows it */
+  @media screen and (min-width: 992px) {
+    .sidebar .nav > .active > ul {
+      display: block;
+    }
+    /* Widen the fixed sidebar */
+    .sidebar.affix,
+    .sidebar.affix-bottom {
+      width: 213px;
+    }
+    .sidebar.affix-top,
+    .sidebar.affix {
+      position: fixed; /* Undo the static from mobile first approach */
+      top: 30px;
+    }
+    .sidebar.affix-bottom {
+      position: absolute; /* Undo the static from mobile first approach */
+    }
+    .sidebar.affix-bottom .sidenav,
+    .sidebar.affix .sidenav {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  @media screen and (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    .sidebar.affix-bottom,
+    .sidebar.affix {
+      width: 263px;
+    }
+  }
+  
+  #toc {
+    padding: 10px 0px;
+    margin:0;
+    border:0;
+  }
+  
+  
+  .panel pre {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  button + pre {
+    margin: 0;
+    padding: 0;
+  }
+  pre code {
+    border-radius: 0;
+  }
+  /* Magnific Popup CSS */
+  .mfp-bg {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1042;
+    overflow: hidden;
+    position: fixed;
+    background: #0b0b0b;
+    opacity: 0.8;
+    filter: alpha(opacity=80); }
+  
+  .mfp-wrap {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1043;
+    position: fixed;
+    outline: none !important;
+    -webkit-backface-visibility: hidden; }
+  
+  .mfp-container {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    padding: 0 8px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+  
+  .mfp-container:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle; }
+  
+  .mfp-align-top .mfp-container:before {
+    display: none; }
+  
+  .mfp-content {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 auto;
+    text-align: left;
+    z-index: 1045; }
+  
+  .mfp-inline-holder .mfp-content,
+  .mfp-ajax-holder .mfp-content {
+    width: 100%;
+    cursor: auto; }
+  
+  .mfp-ajax-cur {
+    cursor: progress; }
+  
+  .mfp-zoom-out-cur,
+  .mfp-zoom-out-cur .mfp-image-holder .mfp-close {
+    cursor: -moz-zoom-out;
+    cursor: -webkit-zoom-out;
+    cursor: zoom-out; }
+  
+  .mfp-zoom {
+    cursor: pointer;
+    cursor: -webkit-zoom-in;
+    cursor: -moz-zoom-in;
+    cursor: zoom-in; }
+  
+  .mfp-auto-cursor .mfp-content {
+    cursor: auto; }
+  
+  .mfp-close,
+  .mfp-arrow,
+  .mfp-preloader,
+  .mfp-counter {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none; }
+  
+  .mfp-loading.mfp-figure {
+    display: none; }
+  
+  .mfp-hide {
+    display: none !important; }
+  
+  .mfp-preloader {
+    color: #cccccc;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    text-align: center;
+    margin-top: -0.8em;
+    left: 8px;
+    right: 8px;
+    z-index: 1044; }
+  
+  .mfp-preloader a {
+    color: #cccccc; }
+  
+  .mfp-preloader a:hover {
+    color: white; }
+  
+  .mfp-s-ready .mfp-preloader {
+    display: none; }
+  
+  .mfp-s-error .mfp-content {
+    display: none; }
+  
+  button.mfp-close,
+  button.mfp-arrow {
+    overflow: visible;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    display: block;
+    padding: 0;
+    z-index: 1046;
+    -webkit-box-shadow: none;
+    box-shadow: none; }
+  
+  button::-moz-focus-inner {
+    padding: 0;
+    border: 0; }
+  
+  .mfp-close {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-decoration: none;
+    text-align: center;
+    opacity: 0.65;
+    padding: 0 0 18px 10px;
+    color: white;
+    font-style: normal;
+    font-size: 28px;
+    font-family: Arial, Baskerville, monospace; }
+    .mfp-close:hover, .mfp-close:focus {
+      opacity: 1; }
+    .mfp-close:active {
+      top: 1px; }
+  
+  .mfp-close-btn-in .mfp-close {
+    color: #333333; }
+  
+  .mfp-image-holder .mfp-close,
+  .mfp-iframe-holder .mfp-close {
+    color: white;
+    right: -6px;
+    text-align: right;
+    padding-right: 6px;
+    width: 100%; }
+  
+  .mfp-counter {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #cccccc;
+    font-size: 12px;
+    line-height: 18px; }
+  
+  .mfp-arrow {
+    position: absolute;
+    opacity: 0.65;
+    margin: 0;
+    top: 50%;
+    margin-top: -55px;
+    padding: 0;
+    width: 90px;
+    height: 110px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+  
+  .mfp-arrow:active {
+    margin-top: -54px; }
+  
+  .mfp-arrow:hover,
+  .mfp-arrow:focus {
+    opacity: 1; }
+  
+  .mfp-arrow:before, .mfp-arrow:after,
+  .mfp-arrow .mfp-b,
+  .mfp-arrow .mfp-a {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 35px;
+    margin-left: 35px;
+    border: medium inset transparent; }
+  .mfp-arrow:after,
+  .mfp-arrow .mfp-a {
+    border-top-width: 13px;
+    border-bottom-width: 13px;
+    top: 8px; }
+  .mfp-arrow:before,
+  .mfp-arrow .mfp-b {
+    border-top-width: 21px;
+    border-bottom-width: 21px; }
+  
+  .mfp-arrow-left {
+    left: 0; }
+    .mfp-arrow-left:after,
+    .mfp-arrow-left .mfp-a {
+      border-right: 17px solid white;
+      margin-left: 31px; }
+    .mfp-arrow-left:before,
+    .mfp-arrow-left .mfp-b {
+      margin-left: 25px;
+      border-right: 27px solid #3f3f3f; }
+  
+  .mfp-arrow-right {
+    right: 0; }
+    .mfp-arrow-right:after,
+    .mfp-arrow-right .mfp-a {
+      border-left: 17px solid white;
+      margin-left: 39px; }
+    .mfp-arrow-right:before,
+    .mfp-arrow-right .mfp-b {
+      border-left: 27px solid #3f3f3f; }
+  
+  .mfp-iframe-holder {
+    padding-top: 40px;
+    padding-bottom: 40px; }
+  
+  .mfp-iframe-holder .mfp-content {
+    line-height: 0;
+    width: 100%;
+    max-width: 900px; }
+  
+  .mfp-iframe-scaler {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    padding-top: 56.25%; }
+  
+  .mfp-iframe-scaler iframe {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    background: black; }
+  
+  .mfp-iframe-holder .mfp-close {
+    top: -40px; }
+  
+  /* Main image in popup */
+  img.mfp-img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    line-height: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 40px 0 40px;
+    margin: 0 auto; }
+  
+  /* The shadow behind the image */
+  .mfp-figure:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 40px;
+    bottom: 40px;
+    display: block;
+    right: 0;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    background: #444444; }
+  
+  .mfp-figure {
+    line-height: 0; }
+  
+  .mfp-bottom-bar {
+    margin-top: -36px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    cursor: auto; }
+  
+  .mfp-title {
+    text-align: left;
+    line-height: 18px;
+    color: #f3f3f3;
+    word-wrap: break-word;
+    padding-right: 36px; }
+  
+  .mfp-figure small {
+    color: #bdbdbd;
+    display: block;
+    font-size: 12px;
+    line-height: 14px; }
+  
+  .mfp-image-holder .mfp-content {
+    max-width: 100%; }
+  
+  .mfp-gallery .mfp-image-holder .mfp-figure {
+    cursor: pointer; }
+  
+  @media screen and (max-width: 800px) and (orientation: landscape), screen and (max-height: 300px) {
+    /**
+     * Remove all paddings around the image on small screen
+     */
+    .mfp-img-mobile .mfp-image-holder {
+      padding-left: 0;
+      padding-right: 0; }
+  
+    .mfp-img-mobile img.mfp-img {
+      padding: 0; }
+  
+    /* The shadow behind the image */
+    .mfp-img-mobile .mfp-figure:after {
+      top: 0;
+      bottom: 0; }
+  
+    .mfp-img-mobile .mfp-bottom-bar {
+      background: rgba(0, 0, 0, 0.6);
+      bottom: 0;
+      margin: 0;
+      top: auto;
+      padding: 3px 5px;
+      position: fixed;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+  
+    .mfp-img-mobile .mfp-bottom-bar:empty {
+      padding: 0; }
+  
+    .mfp-img-mobile .mfp-counter {
+      right: 5px;
+      top: 3px; }
+  
+    .mfp-img-mobile .mfp-close {
+      top: 0;
+      right: 0;
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      background: rgba(0, 0, 0, 0.6);
+      position: fixed;
+      text-align: center;
+      padding: 0; }
+  
+    .mfp-img-mobile .mfp-figure small {
+      display: inline;
+      margin-left: 5px; } }
+  @media all and (max-width: 900px) {
+    .mfp-arrow {
+      -webkit-transform: scale(0.75);
+      transform: scale(0.75); }
+  
+    .mfp-arrow-left {
+      -webkit-transform-origin: 0;
+      transform-origin: 0; }
+  
+    .mfp-arrow-right {
+      -webkit-transform-origin: 100%;
+      transform-origin: 100%; }
+  
+    .mfp-container {
+      padding-left: 6px;
+      padding-right: 6px; } }
+  .mfp-ie7 .mfp-img {
+    padding: 0; }
+  .mfp-ie7 .mfp-bottom-bar {
+    width: 600px;
+    left: 50%;
+    margin-left: -300px;
+    margin-top: 5px;
+    padding-bottom: 5px; }
+  .mfp-ie7 .mfp-container {
+    padding: 0; }
+  .mfp-ie7 .mfp-content {
+    padding-top: 44px; }
+  .mfp-ie7 .mfp-close {
+    top: 0;
+    right: 0;
+    padding-top: 0; }
+  
+  //Magnific overrides
+  .mfp-image img{
+    background: white;
+  }
+  .mfp-figure:after {
+    background: white;
+  }
+  
+  /*
+   * Off Canvas navbar toggle right
+   * --------------------------------------------------
+   */
+  
+  @media screen and (max-width: 768px) {
+    .row-offcanvas .collapsing {
+    -webkit-transition: none 0;
+      -moz-transition: none 0;
+      transition: none 0;
+    }
+   .row-offcanvas .navbar {
+    position: absolute;
+    z-index: 2;
+      right:0;
+      height:100%;
+      width:55px;
+      border:0;
+      background-color:transparent;
+    }
+    .row-offcanvas .navbar-toggle {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+    .row-offcanvas {
+      position: relative;
+    }
+    .row-offcanvas-right.active .navbar {
+    position: absolute;
+    z-index: 2;
+      right: -28.4%;
+      width:40%;
+      background-color:#eee;
+      border:0 solid #ddd;
+      border-left-width:1px;
+    }
+    .row-offcanvas-right.active {
+      left: -30%;
+    }
+    .row-offcanvas-right.active .navbar-collapse {
+      position: relative;
+      width: 100%;
+    }
+    .row-offcanvas .content {
+    /*width:calc(100% - 60px);*/
+    }
+  }
+  </style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">isomiR annotation</h1>
+<h2 class="author">Lorena Pantano</h2>
+<h3 class="date">10/10/2014</h3>
+</div>
+<div id="wrap">
+<div class="container">
+<div class="row row-offcanvas row-offcanvas-right">
+<div class="contents col-xs-12 col-md-10">
+<div class="row">
+<button class="source R toggle btn btn-xs btn-primary">
+<span class="glyphicon glyphicon-chevron-up"></span> R source
+</button><pre style="display:none"><code class="source r">data <- read.table("stats_isomirs_full", header = T)</code></pre>
+</div>
+<h1>Overview</h1>
+<p>The idea of this report is to show how well miraligner and srnabench are decting isomiRs. I simulated a bunch of isomirs (16000) that can have the folowing variation:</p>
+<ul>
+<li>starts at different position than the reference miRNA: t5</li>
+<li>ends at different position than the reference miRNA: t3</li>
+<li>have a mutation: muts</li>
+<li>have nt addition at the end: add</li>
+</ul>
+<p>I used the file <code>miRBase_isoAnnotation.txt</code> from srnabench results. This file only have 1332 sequences, so I don't know what happened with the rest, but it is the only file I found with this information.</p>
+<h1>Detection</h1>
+<p>Correct isomir annotation for miraligner and srnabench.</p>
+<div class="row">
+<button class="source R toggle btn btn-xs btn-primary">
+<span class="glyphicon glyphicon-chevron-up"></span> R source
+</button><pre style="display:none"><code class="source r">library(ggplot2)
+library(reshape)
+data_gg <- melt(data, id.vars = c("name", "is_iso", "tool", "find"))
+ggplot(data_gg, aes(tool, fill = is_iso)) + geom_bar() + scale_fill_brewer(palette = "Set1") + 
+    theme_bw() + facet_wrap("find")</code></pre>
+<div class="row">
+<div class="col-md-offset-3 col-md-6">
+<a href="#" class="thumbnail"><img src="data:image/png;base64,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" /> </a>
+</div>
+</div>
+</div>
+<h1>Accuracy</h1>
+<ul>
+<li><code>is_mir</code> is True when the isomiR is annotated to the correct miRNA</li>
+</ul>
+<div class="row">
+<button class="source R toggle btn btn-xs btn-primary">
+<span class="glyphicon glyphicon-chevron-up"></span> R source
+</button><pre style="display:none"><code class="source r">data_gg_ann <- melt(subset(data, is_mir == "True"), id.vars = c("name", "is_iso", 
+    "tool", "find"))
+ggplot(subset(data_gg_ann, is_iso == "True" & find == "Yes"), aes(variable, 
+    fill = value)) + geom_bar() + theme_bw() + scale_fill_brewer("correct", 
+    palette = "Set1") + facet_wrap(~tool)</code></pre>
+<div class="row">
+<div class="col-md-offset-3 col-md-6">
+<a href="#" class="thumbnail"><img src="data:image/png;base64,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" /> </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="navbar navbar-fixed-bottom navbar-inverse">
+<div class="container">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+</button>
+</div>
+<div id="bottom-navbar" class="navbar-collapse collapse navbar-responsive-collapse">
+<ul class="nav navbar-nav navbar-right"><li class="nav"><p class="navbar-text">
+Toggle
+</p></li>
+<li class="dropup">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Code <b class="caret"></b></a>
+<ul class="dropdown-menu"><li class="dropdown-header">
+Languages
+</li>
+<li class="active">
+<a href="#" class="toggle-global source R" type="source.R">R</a>
+</li>
+<li >
+<a href="#" type="all-source" class="toggle-global">All</a>
+</li></ul></li>
+
+<li class="active">
+<a href="#" type="figure" class="toggle-global">Figures</a>
+</li></ul>
+<ul class="nav navbar-nav navbar-left"><li class="dropup">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Bootstrap theme <b class="caret"></b></a>
+<ul class="dropdown-menu"><li >
+<a class="theme-switch" title="Default" href="#">Default</a>
+</li>
+<li >
+<a class="theme-switch" title="Amelia" href="#">Amelia</a>
+</li>
+<li >
+<a class="theme-switch" title="Cerulean" href="#">Cerulean</a>
+</li>
+<li >
+<a class="theme-switch" title="Cosmo" href="#">Cosmo</a>
+</li>
+<li >
+<a class="theme-switch" title="Cyborg" href="#">Cyborg</a>
+</li>
+<li >
+<a class="theme-switch" title="Journal" href="#">Journal</a>
+</li>
+<li >
+<a class="theme-switch" title="Flatly" href="#">Flatly</a>
+</li>
+<li class="active">
+<a class="theme-switch" title="Readable" href="#">Readable</a>
+</li>
+<li >
+<a class="theme-switch" title="Simplex" href="#">Simplex</a>
+</li>
+<li >
+<a class="theme-switch" title="Slate" href="#">Slate</a>
+</li>
+<li >
+<a class="theme-switch" title="Spacelab" href="#">Spacelab</a>
+</li>
+<li >
+<a class="theme-switch" title="United" href="#">United</a>
+</li></ul></li></ul>
+<ul class="nav navbar-nav navbar-left"><li class="dropup">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Code highlighting <b class="caret"></b></a>
+<ul class="dropdown-menu"><li >
+<a class="highlight-switch" title="HighlightJs" href="#">HighlightJs</a>
+</li>
+<li >
+<a class="highlight-switch" title="Dark" href="#">Dark</a>
+</li>
+<li >
+<a class="highlight-switch" title="Far" href="#">Far</a>
+</li>
+<li >
+<a class="highlight-switch" title="Idea" href="#">Idea</a>
+</li>
+<li >
+<a class="highlight-switch" title="Sunburst" href="#">Sunburst</a>
+</li>
+<li class="active">
+<a class="highlight-switch" title="Zenburn" href="#">Zenburn</a>
+</li>
+<li >
+<a class="highlight-switch" title="Visual Studio" href="#">Visual Studio</a>
+</li>
+<li >
+<a class="highlight-switch" title="Ascetic" href="#">Ascetic</a>
+</li>
+<li >
+<a class="highlight-switch" title="Magula" href="#">Magula</a>
+</li>
+<li >
+<a class="highlight-switch" title="Github" href="#">Github</a>
+</li>
+<li >
+<a class="highlight-switch" title="Google Code" href="#">Google Code</a>
+</li>
+<li >
+<a class="highlight-switch" title="Brown Paper" href="#">Brown Paper</a>
+</li>
+<li >
+<a class="highlight-switch" title="School Book" href="#">School Book</a>
+</li>
+<li >
+<a class="highlight-switch" title="IR Black" href="#">IR Black</a>
+</li>
+<li >
+<a class="highlight-switch" title="Solarized - Dark" href="#">Solarized - Dark</a>
+</li>
+<li >
+<a class="highlight-switch" title="Solarized - Light" href="#">Solarized - Light</a>
+</li>
+<li >
+<a class="highlight-switch" title="Arta" href="#">Arta</a>
+</li>
+<li >
+<a class="highlight-switch" title="Monokai" href="#">Monokai</a>
+</li>
+<li >
+<a class="highlight-switch" title="Xcode" href="#">Xcode</a>
+</li>
+<li >
+<a class="highlight-switch" title="Pojoaque" href="#">Pojoaque</a>
+</li>
+<li >
+<a class="highlight-switch" title="Rainbow" href="#">Rainbow</a>
+</li>
+<li >
+<a class="highlight-switch" title="Tomorrow" href="#">Tomorrow</a>
+</li>
+<li >
+<a class="highlight-switch" title="Tomorrow Night" href="#">Tomorrow Night</a>
+</li>
+<li >
+<a class="highlight-switch" title="Tomorrow Night Bright" href="#">Tomorrow Night Bright</a>
+</li>
+<li >
+<a class="highlight-switch" title="Tomorrow Night Blue" href="#">Tomorrow Night Blue</a>
+</li>
+<li >
+<a class="highlight-switch" title="Tomorrow Night Eighties" href="#">Tomorrow Night Eighties</a>
+</li></ul></li></ul>
+</div>
+</div>
+</div>
+<link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" title="Default" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/amelia/bootstrap.min.css" title="Amelia" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/cerulean/bootstrap.min.css" title="Cerulean" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/cosmo/bootstrap.min.css" title="Cosmo" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/cyborg/bootstrap.min.css" title="Cyborg" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/journal/bootstrap.min.css" title="Journal" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/flatly/bootstrap.min.css" title="Flatly" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/readable/bootstrap.min.css" title="Readable" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/simplex/bootstrap.min.css" title="Simplex" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/slate/bootstrap.min.css" title="Slate" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/spacelab/bootstrap.min.css" title="Spacelab" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/united/bootstrap.min.css" title="United" media="screen"></link><link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/default.min.css" title="HighlightJs" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/dark.min.css" title="Dark" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/far.min.css" title="Far" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/idea.min.css" title="Idea" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/sunburst.min.css" title="Sunburst" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/zenburn.min.css" title="Zenburn" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/vs.min.css" title="Visual Studio" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/ascetic.min.css" title="Ascetic" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/magula.min.css" title="Magula" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/github.min.css" title="Github" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/googlecode.min.css" title="Google Code" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/brown_paper.min.css" title="Brown Paper" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/school_book.min.css" title="School Book" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/ir_black.min.css" title="IR Black" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/solarized_dark.min.css" title="Solarized - Dark" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/solarized_light.min.css" title="Solarized - Light" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/arta.min.css" title="Arta" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/monokai.min.css" title="Monokai" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/xcode.min.css" title="Xcode" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/pojoaque.min.css" title="Pojoaque" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/rainbow.min.css" title="Rainbow" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/tomorrow.min.css" title="Tomorrow" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/tomorrow-night.min.css" title="Tomorrow Night" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/tomorrow-night-bright.min.css" title="Tomorrow Night Bright" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/tomorrow-night-blue.min.css" title="Tomorrow Night Blue" media="screen"></link> <link rel="alternate stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/tomorrow-night-eighties.min.css" title="Tomorrow Night Eighties" media="screen"></link>
+</div>
+<div id="push">
+
+</div>
+<div id="footer">
+<div class="container">
+<p class="text-muted" id="credit">
+Styled with <a href="https://github.com/jimhester/knitrBootstrap">knitrBootstrap</a>
+</p>
+</div>
+</div>
+<link rel="stylesheet" id="theme" href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/readable/bootstrap.min.css" media="screen"></link><link rel="stylesheet" id="highlight" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/zenburn.min.css" media="screen"></link>
+</div>
+</body>
+</html>
