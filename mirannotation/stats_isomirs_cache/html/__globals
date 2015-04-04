@@ -1,4 +1,0 @@
-setup	$	F	library	opts_chunk	T
-load	read.table	T
-iso	aes	c	data	facet_wrap	geom_bar	ggplot	is_iso	library	melt	scale_fill_brewer	theme_bw	tool
-unnamed-chunk-1	~	==	&	aes	c	data	facet_wrap	find	geom_bar	ggplot	is_iso	is_mir	melt	scale_fill_brewer	subset	theme_bw	value	variable
