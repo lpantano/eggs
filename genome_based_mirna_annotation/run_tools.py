@@ -9,7 +9,7 @@ import contextlib
 from os.path import exists as is_there
 from os.path import abspath as full
 from bcbio.provenance import do
-
+import ann_parser as res
 
 @contextlib.contextmanager
 def ch_directory(dir):
@@ -19,13 +19,22 @@ def ch_directory(dir):
     os.chdir(cur_dir)
 
 
+def _stats(ann, fasta, prefix):
+    output = prefix + ".tsv"
+    if not is_there(output):
+        sim_data = res.read_sim_fa(fasta)
+        data, counts = res.read_bam(ann)
+        res.print_output(data, counts, sim_data, output, prefix)
+    return output
+
+
 def _annotate(input, mirbase):
     output = "mirbase.bed"
     cmd = ("bedtools intersect -bed -wo -s -f 0.80 -abam"
            " {input} -b {mirbase} >| {output}")
     if not is_there(output):
         do.run(cmd.format(**locals()), "")
-    return output
+    return full(output)
 
 
 def _star(input, index, mirbase):
@@ -89,12 +98,20 @@ if __name__ == "__main__":
     parser.add_argument("--hisat", help="hisat index")
     args = parser.parse_args()
 
+    outputs = {}
     if args.star:
         print "doing STAR"
-        _star(full(args.fasta), full(args.star), full(args.mirbase))
+        outputs.update({"star": _star(full(args.fasta), full(args.star), full(args.mirbase))})
     if args.bowtie2:
         print "doing bowtie2"
-        _bowtie2(full(args.fasta), full(args.bowtie2), full(args.mirbase))
+        outputs.update({"bowtie2": _bowtie2(full(args.fasta), full(args.bowtie2), full(args.mirbase))})
     if args.hisat:
         print "doing hisat"
-        _hisat(full(args.fasta), full(args.hisat), full(args.mirbase))
+        outputs.update({"hisat": _hisat(full(args.fasta), full(args.hisat), full(args.mirbase))})
+
+    os.remove("summary.tsv") if os.path.exists("summary.tsv") else None
+    with open("summary.tsv", 'w') as out_handle:
+        out_handle.write(res.H + "\n")
+    for tool, stat in outputs.items():
+        stat_file = _stats(stat, args.fasta, tool)
+        do.run("cat %s >> summary.tsv" % stat_file, "merging %s" % tool)
