@@ -19,12 +19,12 @@ data<-read.table("summary.tsv", header=T, sep=" ")
 
 # Overview
 
-The idea of this report is to show how well aligners are decting
+The idea of this report is to show how well aligners are detecting
 miRNA/isomiRs using the whole genome as reference instead of
-using a specific database, such as, miRBase. I hope results
+using a specific database (such as, miRBase). I hope results
 help people decide when is good to align directly to the genome.
 
-I simulated a bunch of isomirs (~16900) that can have the folowing variation:
+I simulated a bunch of isomiRs (~16900) that can have the following variation:
 
 * starts at different position than the reference miRNA: t5
 * ends at different position than the reference miRNA: t3
@@ -33,16 +33,16 @@ I simulated a bunch of isomirs (~16900) that can have the folowing variation:
 
 ## Methods
 
-The simulation was done with the small script inside SeqBuster tool: XXXXX.
+The simulation was done with the small script inside (SeqBuster tool)[http://github.com/lpantano/seqbuster].
 I used human miRBase to simulate isomiRs from precursors. I allowed trimming
-events at both side up to 3 nucleotides, one nucleotide mutation and 
-up to 3 nucleotide as addition.
+events at both sides up to 3 nucleotides, one nucleotide mutation and 
+up to 3 nucleotides as additions.
 
 Then, I used STAR, bowtie2 and HISAT to map to the genome in order to measure
 how good these tools are detecting the correct place. I wrapped everything
 into the following script: `run_analysis.py`. 
 Want to mention that I didn't put much effort to
-check parameteres and tools, but if you have these tools installed, it
+check parameters and tools, but if you have these tools installed, it
 should be pretty easy to reproduce results.
 
 # Results 
@@ -69,7 +69,7 @@ them are not correct. We can expect to detect 60% of the sequenced isomiRs
 if this strategy is used.
 
 If you want to know what is the accuricy when mapping to miRBase directly,
-chec out: XXXXXXX. Both reports use the same simulated isomiRs file.
+check out: XXXXXXX. Both reports use the same simulated isomiRs file.
 
 ### accuracy
 
