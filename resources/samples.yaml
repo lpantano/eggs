@@ -1,0 +1,677 @@
+details:
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415001
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415002
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415003
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415004
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415005
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415006
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Parent
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415007
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Parent
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415008
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Parent
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415009
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415010
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415011
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Parent
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415012
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Parent
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415013
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Parent
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415014
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415015
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415016
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415017
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415018
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415019
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415020
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415021
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415022
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415023
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Male
+- algorithm:
+    aligner: bwa
+    coverage: /path/target.bed
+    ensemble:
+      numpass: 2
+    kraken: minikraken
+    mark_duplicates: true
+    mixup_check: qsignature
+    quality_format: standard
+    realign: false
+    recalibrate: false
+    remove_lcr: true
+    variant_regions: /path/ex_targets.bed
+    variantcaller:
+    - freebayes
+    - gatk-haplotype
+    - platypus
+    - samtools
+  analysis: variant2
+  description: 415024
+  files:
+  - /path/data/f_R1.fastq.gz
+  - /path/data/f_R2.fastq.gz
+  genome_build: GRCh37
+  metadata:
+    batch: batch1
+    phenotype: Affected
+    sex: Female
+fc_date: '2015-05-30'
+fc_name: ex_samples-merged
+upload:
+  dir: ../final

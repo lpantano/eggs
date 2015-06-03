@@ -1,0 +1,89 @@
+galaxy_config: universe_wsgi.ini
+resources:
+  bcbio_variation:
+    dir: /home/lpantano/soft/bcbiotools/share/java/bcbio_variation
+    jvm_opts:
+    - -Xms750m
+    - -Xmx2500m
+  bwa:
+    cmd: bwa
+    cores: 16
+  default:
+    cores: 16
+    jvm_opts:
+    - -Xms750m
+    - -Xmx2000m
+    memory: 2G
+  express:
+    memory: 8g
+  gatk:
+    dir: /home/lpantano/soft/bcbio/toolplus/gatk/3.2-2-gec30cee
+    jvm_opts:
+    - -Xms500m
+    - -Xmx3500m
+  gatk-haplotype:
+    jvm_opts:
+    - -Xms500m
+    - -Xmx3500m
+  gatk-vqsr:
+    jvm_opts:
+    - -Xms500m
+    - -Xmx3500m
+  fake:
+    cores: 1
+    memory: 12g
+  log:
+    dir: /home/lpantano/soft/bcbiotools/share/java/log
+  mutect:
+    dir: /home/lpantano/soft/bcbiotools/share/java/mutect
+    jvm_opts:
+    - -Xms750m
+    - -Xmx2500m
+  oncofuse:
+    dir: /home/lpantano/soft/bcbiotools/share/java/oncofuse
+    jvm_opts:
+    - -Xms750m
+    - -Xmx2000m
+  picard:
+    dir: /home/lpantano/soft/bcbiotools/share/java/picard
+    jvm_opts:
+    - -Xms750m
+    - -Xmx3500m
+  qsignature:
+    cores: 1
+    memory: 2g
+  qsnp:
+    jvm_opts:
+    - -Xms750m
+    - -Xmx6g
+  rnaseqc:
+    dir: /home/lpantano/soft/bcbiotools/share/java/RNA-SeQC
+    jvm_opts:
+    - -Xms750m
+    - -Xmx20g
+  samtools:
+    cores: 16
+    memory: 2G
+  snap:
+    cores: 16
+    memory: 4G
+  snpeff:
+    jvm_opts:
+    - -Xms750m
+    - -Xmx6g
+  star:
+    cores: 16
+    memory: 2g
+  tmp:
+    dir: null
+  ucsc_bigwig:
+    memory: 36g
+  vardict:
+    jvm_opts:
+    - -Xms750m
+    - -Xmx4000m
+  varscan:
+    dir: /home/lpantano/soft/bcbiotools/share/java/varscan
+    jvm_opts:
+    - -Xms750m
+    - -Xmx2000m

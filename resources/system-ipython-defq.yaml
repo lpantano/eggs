@@ -1,0 +1,3 @@
+- cores: 16
+  memory: 47.185546875
+  name: slurm_machine
