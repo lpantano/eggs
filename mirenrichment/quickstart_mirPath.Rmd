@@ -1,0 +1,72 @@
+pMim - Integrating RNA-Seq, miRNA-Seq and pathway information
+========================================================
+
+```{r include=FALSE}
+opts_chunk$set(message=FALSE, warning=FALSE)
+```
+
+
+The following provides an example of how to use pMim. The markdown code that generated this html file, <a href="https://github.com/ellispatrick/sydSeq/blob/master/Examples/pMim/pMimExample.Rmd" target="_blank"> pMimExample.Rmd </a>,  along with the associated data can be found on my github account at <a href="https://github.com/ellispatrick/sydSeq/blob/master/Examples/pMim/" target="_blank"> https://github.com/ellispatrick/sydSeq/blob/master/Examples/pMim/ </a>. Start by reading in the RNA-Seq and miRNA-Seq data.
+
+
+```{r}
+### Load packages
+library(devtools)
+
+library(goseq) #For getting KEGG pathways easily
+library(KEGG.db)
+
+
+# you need to check the names of your matrix miRNA counts match the one in the mirdb
+# This code helps you if you have premature miRNA
+miR = rownames(DataMi)
+miR = sub("mir", "miR", miR)
+miR = c(miR, paste(miR, "-3p", sep = ""), paste(miR, "-5p", sep = ""))
+miR = split(miR, c(rownames(DataMi), rownames(DataMi), rownames(DataMi)))
+# miR should be a list for all synonims that you want to include for each rowname in the miRNA count matrix
+# example: first element in matrix 'hsa-let-7a' with this values c('hsa-let-7a-3p', 'hsa-let-7a-5p') 
+# and the first element is the one as row.names in the miRNA count matrix
+
+
+mirdb = read.table(gzfile("hsa_miRDB_v5.0_prediction_result.txt.gz"))
+map = read.table("hsa_refseq_mirdb_ensembl")
+idx = match(mirdb$V2, map$V1)
+mirdb = cbind(mirdb, gene=map[idx,"V2"])
+
+# change to the specie you want
+kegg = getgo(rownames(dataGene), fetch.cats = "KEGG", genome = "hg19", id = "ensGene")
+kegg2ens = Biobase::reverseSplit(kegg)
+kname = mget(names(kegg2ens), env = KEGGPATHID2NAME)
+names(kegg2ens) = kname
+```
+
+```{r prepare-targets}
+
+targets = lapply(miR, function(z) as.character(unique(mirdb[mirdb[, "V1"] %in% z, "gene"])))
+
+```
+
+
+The pathway and miRNA target information can then be read in. Here we use KEGG for the pathway information and TargetScan for the miRNA target predictions.
+
+
+We are now in a position to run pMim and view the top ten mir-pathways that are identified.
+
+```{r run}
+# DEmirs are a vector with the names of DE miRNAs that are in the rownames of the count matrix
+# and in the list of targets
+output = mirPath(DEmirs = mirnas, dtMi = dataMir, dtG = dataGene, classes = classes, targets = targets, pathways = kegg2ens, fdr="bonferroni")
+
+# if you have the Zscore for the DE expression in both data set
+output = mirPath(sim$DEmirna, dtMi = dataMir, dtG = dataGene, Zmi = Zmi, Zg = Zg,
+                 classes = classes, targets = targets, pathways = kegg2ens, fdr="bonferroni")
+
+
+rownames(output) = output$path
+output$true = 0
+output[names(others),"true"] = others
+output$score = output$genes/output$weight
+resEnrichment = output
+
+```
+

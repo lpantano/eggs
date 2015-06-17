@@ -1,0 +1,156 @@
+# The preparation code comes from the package pMim from https://github.com/lpantano/sydSeq.git
+# I changed many parts of the code and stats, but the inspiration comes from that
+
+require(limma)
+
+mirPath = function (DEmirs=DEmirs, dtMi, dtG, classes, targets, pathways, Zmi = NULL,
+                 Zg = NULL, stat = "cor", corP = "Fisher", nInt = 2, randomTarg = FALSE,
+                 randomPath = FALSE, fdr="fdr", verbose = TRUE)
+{
+  if (length(DEmirs)==0){
+      message("No deregulated miRNAs")
+      return(data.frame())
+  }
+  if (verbose == TRUE) {
+    if (sum(colnames(dtG) != names(classes)) > 0 | is.null(names(classes))) {
+      cat("colnames of Gene Data do not match names of classes")
+    }
+  }
+  if (verbose == TRUE) {
+    if (sum(colnames(dtG) != names(classes)) > 0 | is.null(names(classes))) {
+      cat("colnames of miRNA Data do not match names of classes")
+    }
+  }
+  y = names(classes)
+  X = t(dtG)
+  Y = t(dtMi)
+  corYX = cor(Y[y, ], X[y, ])
+#  if (stat == "cor") {
+    # corYX = cor(Y[y, ], X[y, ])
+    n = length(y)
+    TR = corYX^2
+    # TR[] = ((rank(corYX) - 0.5)/length(corYX))
+    # TR = qnorm(TR)
+
+#     if (corP == "estimate") {
+#     }
+#     else {
+#       if (n > 3) {
+#         TR <- sqrt(n - 3) * atanh(corYX)
+#       }
+#       else {
+#         cat("Need more replicates or use cor=\"estimate\"")
+#         break
+#       }
+#    }
+#  }
+  if (is.null(Zmi)) {
+    require(limma)
+    design = model.matrix(~classes)
+    Dat = dtMi[, names(classes)]
+    fit = lmFit(Dat, design)
+    #ordinary.t <- fit$coef/fit$stdev.unscaled/pmax(pmax(fit$sigma,
+    #                                                    sqrt(rowMeans(Dat))), 1)
+    efit =ebayes(fit)
+    #Tmi = ordinary.t[, 2]
+    Zmi = qnorm(pt(efit$t[,2], fit$df.res))
+  }
+
+  if (is.null(Zg)) {
+    require(limma)
+    design = model.matrix(~classes)
+    Dat = dtG[, names(classes)]
+    fit = lmFit(Dat, design)
+    #ordinary.t <- fit$coef/fit$stdev.unscaled/pmax(pmax(fit$sigma,
+    #                                                    sqrt(rowMeans(Dat))), 1)
+    efit = ebayes(fit)
+    #Tg = ordinary.t[, 2]
+    Zg = qnorm(pt(efit$t[,2], fit$df.res))
+  }
+
+  # mi = colnames(Y)
+  mi = DEmirs
+  msgr = intersect(unlist(pathways), unlist(targets))
+  mapMat = matrix(0, length(mi), length(msgr))
+  rownames(mapMat) = mi
+  colnames(mapMat) = msgr
+  for (i in rownames(mapMat)) {
+    if (randomTarg == TRUE) {
+      mapMat[i, sample(colnames(mapMat), sum(msgr %in%
+                                               targets[[i]]))] = 1
+    }
+    else {
+      mapMat[i, msgr %in% targets[[i]]] = 1
+    }
+  }
+  # mapMat row=mirna, col=genes
+  use = names(which(rowSums(mapMat) > 0))
+  mapMat = mapMat[use, ]
+  mi = use
+  pathName = names(pathways)
+  pathMat = matrix(0, length(pathName), length(msgr))
+  rownames(pathMat) = pathName
+  colnames(pathMat) = msgr
+  # pathMat row=paths, col=genes
+  for (j in 1:length(pathName)) {
+    if (randomPath == TRUE) {
+      pathMat[j, sample(colnames(mapMat), sum(msgr %in%
+                                                pathways[[j]]))] = 1
+    }
+    else {
+      pathMat[j, msgr %in% pathways[[j]]] = 1
+    }
+  }
+  N = mapMat %*% t(pathMat)
+  test = which(N >= nInt, 2)
+  testPath = unique(test[,2])
+  G = rep(NA,length=length(testPath))
+  names(G) = pathName[testPath]
+  #G = G[1:10]
+  N = Nw = G
+  #colnames(G) = pathname
+  Tmat = corYX
+  Tmat[] = NA
+  #for (k in 1:nrow(test)) {
+  for (path_item in testPath){
+    mir_items = rownames(test[test[,2]==path_item,,drop=F])
+    name_path = rownames(pathMat)[path_item]
+    #j = test[k, 2]
+    pathway = pathMat[name_path, ]
+    # tr = TR[i, ]
+    binding = round((colSums(mapMat[mir_items, ,drop=F]) / (colSums(mapMat[mir_items, ,drop=F ]) + 1)))
+    keep = names(which(binding * pathway == 1))
+    Zg_keep = Zg[keep]
+    Zm_keep = Zmi[mir_items]
+
+    if (length(keep)>0){
+        t = TR[mir_items, keep ,drop=F]
+        tmax = sapply(keep, function(x){
+            is_target = names(which(Zm_keep*Zg_keep[x]<0))
+            if (length(is_target)==0){return(NA)}
+            idx = is_target[which.max(t[is_target, x] * Zg_keep[x])]
+            t[idx, x]
+        })
+        Zg_keep = Zg_keep[!is.na(tmax)]
+        tmax = tmax[!is.na(tmax)]
+
+        tcorr = tmax
+        tcorr[tcorr<0.5] = 0.5
+
+        q <- pnorm(sum(tmax * abs(Zg_keep))/sqrt(sum(tcorr)));
+        q <- 2*min(q, 1-q)
+
+        G[name_path] = q
+        N[name_path] = length(tmax)
+        Nw[name_path] = sum(tmax)
+    }
+    # Gnorm[k] = pnorm(sum(max(abs(Zmi[i])))/(length(i)))
+  }
+
+  G = p.adjust(G, method = fdr)
+  # Score = pchisq(-2 * (log(1 - G) + log(1 - Gnorm)), 4)
+
+
+  data.frame(path=pathName[testPath],FDR=G,genes=N, weight=Nw)
+  #list(Results = res, Scores = Score, Zg = Zg, Zmi = Zmi, cor = corYX, corTransform = TR,Direction = direction,targets = targets, pathways = pathways)
+}
