@@ -4,7 +4,7 @@
 require(limma)
 
 mirPath = function (DEmirs=DEmirs, dtMi, dtG, classes, targets, pathways, Zmi = NULL,
-                 Zg = NULL, cor=NULL, corP = "Fisher", nInt = 2, randomTarg = FALSE,
+                 Zg = NULL, cor=0.7, corP = "Fisher", nInt = 2, randomTarg = FALSE,
                  randomPath = FALSE, fdr="fdr", verbose = TRUE)
 {
   if (length(DEmirs)==0){
@@ -22,11 +22,21 @@ mirPath = function (DEmirs=DEmirs, dtMi, dtG, classes, targets, pathways, Zmi = 
     }
   }
   if (!is.null(cor)){
-    if (ncol(cor) != nrow(dtG) | nrow(row) != nrow(dtY)){
-      stop("The correlation matrix should be same rows than miRNAs and same columns than genes.")
+    if (is.matrix(cor)){
+      if (ncol(cor) != nrow(dtG) | nrow(row) != nrow(dtMi)){
+        stop("The correlation matrix should be same rows than miRNAs and same columns than genes.")
+      }
+      TR = cor
+    } else{
+      if (is.numeric(cor)){
+        cor = abs(cor)
+      }
     }
-    TR = cor
+  } else{
+    stop("Not supported correlation value. Should be NULL, matrix, or numeric.")
   }
+
+
   if (ncol(dtG) == ncol(dtMi)){
     y = names(classes)
     X = t(dtG)
@@ -37,7 +47,7 @@ mirPath = function (DEmirs=DEmirs, dtMi, dtG, classes, targets, pathways, Zmi = 
   }else{
     warning("Not paired samples, all miRNA-mRNA will be considered equally")
     TR = matrix(ncol=ncol(dtG), nrow=nrow(dtMi))
-    TR[] = 1
+    TR[] = cor
   }
 
   if (is.null(Zmi)) {
