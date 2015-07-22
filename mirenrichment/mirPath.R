@@ -4,7 +4,7 @@
 require(limma)
 
 mirPath = function (DEmirs=DEmirs, dtMi, dtG, classes, targets, pathways, Zmi = NULL,
-                 Zg = NULL, stat = "cor", corP = "Fisher", nInt = 2, randomTarg = FALSE,
+                 Zg = NULL, cor=NULL, corP = "Fisher", nInt = 2, randomTarg = FALSE,
                  randomPath = FALSE, fdr="fdr", verbose = TRUE)
 {
   if (length(DEmirs)==0){
@@ -21,29 +21,25 @@ mirPath = function (DEmirs=DEmirs, dtMi, dtG, classes, targets, pathways, Zmi = 
       cat("colnames of miRNA Data do not match names of classes")
     }
   }
-  y = names(classes)
-  X = t(dtG)
-  Y = t(dtMi)
-  corYX = cor(Y[y, ], X[y, ])
-#  if (stat == "cor") {
-    # corYX = cor(Y[y, ], X[y, ])
+  if (!is.null(cor)){
+    if (ncol(cor) != nrow(dtG) | nrow(row) != nrow(dtY)){
+      stop("The correlation matrix should be same rows than miRNAs and same columns than genes.")
+    }
+    TR = cor
+  }
+  if (ncol(dtG) == ncol(dtMi)){
+    y = names(classes)
+    X = t(dtG)
+    Y = t(dtMi)
+    corYX = cor(Y[y, ], X[y, ])
     n = length(y)
     TR = corYX^2
-    # TR[] = ((rank(corYX) - 0.5)/length(corYX))
-    # TR = qnorm(TR)
+  }else{
+    warning("Not paired samples, all miRNA-mRNA will be considered equally")
+    TR = matrix(ncol=ncol(dtG), nrow=nrow(dtMi))
+    TR[] = 1
+  }
 
-#     if (corP == "estimate") {
-#     }
-#     else {
-#       if (n > 3) {
-#         TR <- sqrt(n - 3) * atanh(corYX)
-#       }
-#       else {
-#         cat("Need more replicates or use cor=\"estimate\"")
-#         break
-#       }
-#    }
-#  }
   if (is.null(Zmi)) {
     require(limma)
     design = model.matrix(~classes)
@@ -109,15 +105,10 @@ mirPath = function (DEmirs=DEmirs, dtMi, dtG, classes, targets, pathways, Zmi = 
   #G = G[1:10]
   N = Nw = G
   #colnames(G) = pathname
-  Tmat = corYX
-  Tmat[] = NA
-  #for (k in 1:nrow(test)) {
   for (path_item in testPath){
     mir_items = rownames(test[test[,2]==path_item,,drop=F])
     name_path = rownames(pathMat)[path_item]
-    #j = test[k, 2]
     pathway = pathMat[name_path, ]
-    # tr = TR[i, ]
     binding = round((colSums(mapMat[mir_items, ,drop=F]) / (colSums(mapMat[mir_items, ,drop=F ]) + 1)))
     keep = names(which(binding * pathway == 1))
     Zg_keep = Zg[keep]
@@ -144,7 +135,6 @@ mirPath = function (DEmirs=DEmirs, dtMi, dtG, classes, targets, pathways, Zmi = 
         N[name_path] = length(tmax)
         Nw[name_path] = sum(tmax)
     }
-    # Gnorm[k] = pnorm(sum(max(abs(Zmi[i])))/(length(i)))
   }
 
   G = p.adjust(G, method = fdr)
