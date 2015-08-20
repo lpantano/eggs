@@ -113,7 +113,7 @@ def _prepare_samples(args):
 if __name__ == "__main__":
     parser = ArgumentParser(description="clean SV VCF files.")
     parser.add_argument("--region", help="bed file with regions.")
-    parser.add_argument("files", nargs="*", help="Bam files.")
+    parser.add_argument("files", nargs="*", help="final folder of bcbio.")
     parser.add_argument("--run", required=1, help="Clean VCF file.", choices=['report'])
     args = parser.parse_args()
 
