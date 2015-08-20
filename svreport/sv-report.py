@@ -1,5 +1,8 @@
 """
+It needs as input the final folder of bcbio
+python sv-report.py --run report /path/to/final/bcbio
 
+12% chances to work :)
 """
 import os
 import os.path as op
