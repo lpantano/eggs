@@ -3,7 +3,7 @@ require 'formula'
 class RnaStar < Formula
   homepage 'https://code.google.com/p/rna-star'
   version '2.4.0j'
-  url 'http://github.com/alexdobin/STAR/releases/tag/STAR_2.4.2a.zip'
+  url 'https://github.com/alexdobin/STAR/archive/STAR_2.4.2a.zip'
   sha1 '477238d535c88ad2b8cede69548a21f361d2f39b'
 
   def install
