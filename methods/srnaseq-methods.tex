@@ -1,0 +1,42 @@
+% Created 2015-01-21 Wed 13:38
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\date{10-01-2015}
+\title{small rnaseq-methods}
+\begin{document}
+
+\maketitle
+
+\section{Methods}
+
+All samples are processed using sRNA-seq pipeline implemented in
+\href{http://bcbio-nextgen.readthedocs.org/en/latest/}{bcbio-nextgen project}.
+Raw reads will be examined for quality
+issues using FastQC to ensure library generation and sequencing are
+suitable for further analysis. 3' end adapter were trimmed from reads using
+cutadapt \cite{Martin:2011va}. Trimmed reads were aligned to miRBase
+21 \cite{Kozomara2014} using seqbuster \cite{Pantano2010}.
+
+miRNAs counting was done with isomiRs package \href{http://github.com/lpantano/isomiRs} discarting any sequence with only 1 count. Normalilzation and differential expression at the gene level were called with
+DESeq2 \cite{Love:2014do}, which has been shown to be a robust,
+conservative differential expression calller.
+
+\section{Bibliography}
+\bibliographystyle{plain}
+\bibliography{srnaseq-methods}
+\end{document}

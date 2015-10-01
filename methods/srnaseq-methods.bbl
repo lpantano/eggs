@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+
+\bibitem{Kozomara2014}
+Ana Kozomara and Sam Griffiths-Jones.
+\newblock {miRBase: annotating high confidence microRNAs using deep sequencing
+  data.}
+\newblock {\em Nucleic acids research}, 42(Database issue):D68--73, 2014.
+
+\bibitem{Love:2014do}
+Michael~I Love, Wolfgang Huber, and Simon Anders.
+\newblock {Moderated estimation of fold change and dispersion for RNA-seq data
+  with DESeq2.}
+\newblock {\em Genome Biology}, 15(12):550, December 2014.
+
+\bibitem{Martin:2011va}
+Marcel Martin.
+\newblock {Cutadapt removes adapter sequences from high-throughput sequencing
+  reads}.
+\newblock {\em EMBnet.journal}, 17(1):pp. 10--12, February 2011.
+
+\bibitem{Pantano2010}
+Lorena Pantano, Xavier Estivill, and Eul\`{a}lia Mart\'{\i}.
+\newblock {SeqBuster, a bioinformatic tool for the processing and analysis of
+  small RNAs datasets, reveals ubiquitous miRNA modifications in human
+  embryonic cells}.
+\newblock {\em Nucleic Acids Research}, 38(5):e34, 2010.
+
+\end{thebibliography}
